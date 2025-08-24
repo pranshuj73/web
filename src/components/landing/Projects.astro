@@ -1,0 +1,26 @@
+---
+import projectsData from '../../data/projects.json';
+import SectionHeading from '../ui/SectionHeading.astro';
+const projects = projectsData.projects;
+---
+
+<section class="space-y-4">
+  <SectionHeading command="cat" heading="projects" extension="json" />
+  
+  <div class="space-y-4">
+    {projects.map(project => (
+      <div class="flex items-start justify-between space-y-1">
+        <div class="flex flex-col space-y-1">
+          <div class="font-semibold flex items-center space-x-2">
+            <div class="w-2 h-2 bg-gray-600 rounded-full"></div>
+          <span class="font-semibold">{project.name}</span>
+        </div>
+        <p class="text-gray-400 text-sm">{project.description}</p>
+        </div>
+        <a href={project.url} target="_blank" rel="noopener noreferrer" class="text-gray-400 text-sm">
+          View Project →
+        </a> 
+      </div>
+    ))}
+  </div>
+</secti> 

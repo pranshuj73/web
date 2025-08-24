@@ -1,0 +1,30 @@
+---
+import experienceData from '../../data/experience.json';
+import SectionHeading from '../ui/SectionHeading.astro';
+const experiences = experienceData.experience;
+---
+
+<section class="space-y-4">
+  <SectionHeading command="ls -la" heading="./experiences" extension={null} />
+  
+  <div class="space-y-4">
+    {experiences.map(exp => (
+      <div class="flex items-start justify-between space-y-1">
+        <div class="flex flex-col space-y-1">
+          <div class="font-semibold flex items-center space-x-2">
+            <span>{exp.company}</span>
+            {exp.active && (
+              <div class="size-2 bg-teal-600 rounded-full shadow-lg shadow-teal-600/50 animate-pulse"></div>
+            )}
+          </div>
+          <span class="text-gray-400 text-sm">
+            {exp.title}
+          </span>
+        </div>
+        <p class="text-gray-400 text-sm">
+          {exp.duration} • {exp.location}
+        </p>
+      </div>
+    ))}
+  </div>
+</section> 

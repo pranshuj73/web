@@ -1,0 +1,24 @@
+---
+import skillsData from '../../data/skills.json';
+import SectionHeading from '../ui/SectionHeading.astro';
+const skills = skillsData.skills;
+---
+
+<section class="space-y-4">
+  <SectionHeading command="cat" heading="skills" extension="md" />
+  
+  <p class="text-gray-400 mb-6">
+    i love building things with code, specially projects that i can use in my day to day life. here are some of the skills i've picked up over the years of tinkering with code.
+  </p>
+  
+  <div class="space-y-2">
+    {skills.map(skillGroup => (
+      <div class="flex flex-wrap gap-2">
+        <p class="font-semibold">{skillGroup.category}:</p>
+        {skillGroup.items.map(skill => (
+          <span class="tech-tag">{skill}</span>
+        ))}
+      </div>
+    ))}
+  </div>
+</section> 

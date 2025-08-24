@@ -1,0 +1,28 @@
+{
+  "skills": [
+    {
+      "category": "Languages",
+      "items": ["JavaScript", "TypeScript", "Python", "Go", "SQL"]
+    },
+    {
+      "category": "Frontend",
+      "items": ["React", "Next.js", "Tailwind CSS", "Shadcn", "Tanstack Query"]
+    },
+    {
+      "category": "Backend",
+      "items": ["Hono.js", "Express.js", "FastAPI", "Langchain", "LangGraph", "AI SDK"]
+    },
+    {
+      "category": "Databases",
+      "items": ["MongoDB", "PostgreSQL", "MySQL", "Redis"]
+    },
+    {
+      "category": "DevOps & Cloud",
+      "items": ["Docker", "AWS", "Cloudflare"]
+    },
+    {
+      "category": "Others",
+      "items": ["Git", "REST", "gRPC", "tRPC", "Prisma", "Drizzle", "SQLAlchemy"]
+    }
+  ]
+} 

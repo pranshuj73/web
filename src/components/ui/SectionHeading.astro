@@ -1,0 +1,5 @@
+---
+const { command = "cat", heading, extension = "md" } = Astro.props;
+---
+
+<h2 class="font-mono text-neutral-400">$ {command} <span class="text-white">{heading}</span>{extension ? `.${extension}` : ""}</h2>
