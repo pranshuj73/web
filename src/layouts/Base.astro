@@ -1,6 +1,8 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const { class: className } = Astro.props;
 ---
 
 <!doctype html>
@@ -9,7 +11,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
 	<body class="dark bg-black text-neutral-300">
-    <main class="flex flex-col gap-12 max-w-3xl mx-auto px-4 py-8">
+    <main class={`flex flex-col gap-12 max-w-3xl mx-auto ${className}`}>
       <slot />
 		</main>
 	</body>

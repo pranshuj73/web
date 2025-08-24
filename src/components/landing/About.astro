@@ -9,7 +9,7 @@ const about = `i'm ${age}-year-old developer based in chennai, india. passionate
 const latestProject = projectsData.projects[0];
 ---
 
-<div class="space-y-6">
+<section class="space-y-6">
   <!-- Hero Section -->
   <div class="flex items-center space-x-4">
     <img src="/assets/pfp.jpg" class="size-18 rounded-3xl" alt="Pranshu Jha" />
@@ -22,4 +22,4 @@ const latestProject = projectsData.projects[0];
   <!-- About -->
   <p>{about}</p>
   <p>currently working on something called <a href={latestProject.url} target="_blank" rel="noopener noreferrer" class="text-yellow-500 hover:text-yellow-600">{latestProject.name}</a></p>
-</div>
+</section>
