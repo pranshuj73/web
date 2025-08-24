@@ -6,7 +6,7 @@ const experiences = experienceData.experience;
 
 <section class="space-y-4">
   <SectionHeading command="ls -la" heading="./experiences" extension={null} />
-  
+
   <div class="space-y-4">
     {experiences.map(exp => (
       <div class="flex items-start justify-between space-y-1">
@@ -14,7 +14,10 @@ const experiences = experienceData.experience;
           <div class="font-semibold flex items-center space-x-2">
             <span>{exp.company}</span>
             {exp.active && (
-              <div class="size-2 bg-teal-600 rounded-full shadow-lg shadow-teal-600/50 animate-ping"></div>
+            <div class="relative [&>div]:absolute -mt-1">
+                <div class="size-2 bg-teal-600 rounded-full shadow-lg shadow-teal-600/50 animate-ping"></div>
+                <div class="size-2 bg-teal-600 rounded-full shadow-lg shadow-teal-600/50"></div>
+              </div>
             )}
           </div>
           <span class="text-neutral-400 text-sm">
