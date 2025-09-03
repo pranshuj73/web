@@ -25,6 +25,9 @@ import BaseHead from '../components/BaseHead.astro';
 		-webkit-user-select: none;
 		-moz-user-select: none;
 		-ms-user-select: none;
+		touch-action: none;
+		-webkit-touch-callout: none;
+		-webkit-tap-highlight-color: transparent;
 	}
 	#ascii-output {
 		position: absolute;
@@ -233,6 +236,25 @@ import BaseHead from '../components/BaseHead.astro';
 <script>
 	// Wait for DOM to be ready
 	document.addEventListener('DOMContentLoaded', async () => {
+		// Dynamic camera distance based on viewport width
+		function getCameraDistance() {
+			const width = window.innerWidth;
+			
+			if (width <= 480) {
+				return 900; // Small phones
+			} else if (width <= 768) {
+				return 700; // Large phones / small tablets
+			} else if (width <= 1024) {
+				return 650; // Tablets / small laptops
+			} else {
+				return 600; // Standard desktops
+			}
+		}
+
+		function debug(message) {
+			document.getElementById('debug').textContent = message;
+		}
+
 		try {
 			// Dynamic import of Three.js and required addons
 			const THREE = await import('three');
@@ -242,16 +264,13 @@ import BaseHead from '../components/BaseHead.astro';
 			let camera, controls, scene, renderer, effect;
 			let text404Mesh;
 
-			function debug(message) {
-				console.log(message);
-				document.getElementById('debug').textContent = message;
-			}
 
-			debug('[INIT] Booting graphics subsystem...');
+			debug('[KERN] Initializing 3D graphics subsystem...');
 
 			// Scene setup
 			camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 2000);
-			camera.position.set(0, 0, 600);
+			// Set camera distance based on viewport width
+			camera.position.set(0, 0, getCameraDistance());
 			camera.lookAt(0, 0, 0);
 
 			scene = new THREE.Scene();
@@ -272,21 +291,23 @@ import BaseHead from '../components/BaseHead.astro';
 			const loader = new FontLoader();
 			
 			// Load font and create real text (no fallback cubes needed)
-			debug('[LOADER] Fetching font binary from remote host...');
+			debug('[NET] Downloading font binary from CDN...');
 			loader.load(
 				'https://threejs.org/examples/fonts/helvetiker_regular.typeface.json',
 				function(font) {
-					debug('[SUCCESS] Font binary decoded, compiling geometry...');
-					// Don't remove cubes yet - let's see if text renders first
+					debug('[FONT] Binary decoded, compiling mesh geometry...');
 					
+					const baseSize = 200;
+					const baseBevelThickness = 5;
+					const baseBevelSize = 3;
+
 					const textGeometry = new TextGeometry('404', {
 						font: font,
-						size: 200,
-						height: 50,
+						size: baseSize,
 						curveSegments: 12,
 						bevelEnabled: true,
-						bevelThickness: 5,
-						bevelSize: 3,
+						bevelThickness: baseBevelThickness,
+						bevelSize: baseBevelSize,
 						bevelOffset: 0,
 						bevelSegments: 5
 					});
@@ -310,47 +331,40 @@ import BaseHead from '../components/BaseHead.astro';
 					text404Mesh.position.set(0, 0, 0);
 					scene.add(text404Mesh);
 
-					debug('Text positioned at: ' + centerOffsetX + ', ' + centerOffsetY + ', 0');
-					debug('Scene children count: ' + scene.children.length);
-					debug('Text mesh added to scene: ' + (scene.children.includes(text404Mesh)));
+					debug('[GEOM] Text mesh centered and positioned');
+					debug('[SCENE] Objects registered in render queue');
+					debug('[MESH] 404 geometry added to world space');
 
-					debug('[RENDER] 3D mesh allocated, vertices loaded to GPU');
+					debug('[GPU] Mesh uploaded to graphics memory');
+					
+					// Initialize TrackballControls like the original ASCII example
+					import('three/addons/controls/TrackballControls.js').then(({ TrackballControls }) => {
+						controls = new TrackballControls(camera, effect.domElement);
+						
+						// Configure controls to only allow rotation (no zoom/pan)
+						controls.noZoom = true;
+						controls.noPan = true;
+						controls.rotateSpeed = 3.0; // Increase sensitivity for easier dragging
+						controls.staticMoving = true;
+						controls.dynamicDampingFactor = 0.3;
+						
+						debug('[INPUT] Touch/mouse handlers initialized');
+						debug('[RENDER] 3D mesh allocated, vertices loaded to GPU');
+					});
+					
+					// Restart animation now that text mesh is ready
+					stopAnimation();
+					startAnimation();
 				},
 				function(progress) {
-					debug('Font loading progress: ' + Math.round(progress.loaded / progress.total * 100) + '%');
+					debug('[NET] Transfer ' + Math.round(progress.loaded / progress.total * 100) + '% complete');
 				},
 				function(error) {
-					debug('Font loading failed: ' + error.message + ' - using cubes');
+					debug('[ERR] Font download failed, fallback active');
 				}
 			);
 
-			function createFallbackCubes() {
-				// Fallback to cubes if font loading fails
-				const textGeometry = new THREE.BoxGeometry(80, 80, 80);
-				const textMaterial = new THREE.MeshPhongMaterial({ 
-					color: 0x00ff00,
-					flatShading: true
-				});
-
-				const four1 = new THREE.Mesh(textGeometry, textMaterial);
-				four1.position.set(-200, 0, 0);
-				scene.add(four1);
-				
-				const zero1 = new THREE.Mesh(textGeometry, textMaterial);
-				zero1.position.set(0, 0, 0);
-				scene.add(zero1);
-				
-				const four2 = new THREE.Mesh(textGeometry, textMaterial);
-				four2.position.set(200, 0, 0);
-				scene.add(four2);
-
-				text404Mesh = zero1; // Use center mesh for reference
-				debug('Fallback cubes created');
-			}
-
-			// No plane - just the text
-
-			debug('3D objects created');
+			debug('[MESH] 3D objects loaded into scene graph');
 
 			// WebGL renderer
 			renderer = new THREE.WebGLRenderer();
@@ -366,116 +380,29 @@ import BaseHead from '../components/BaseHead.astro';
 			// Append the ASCII effect to the container (not the regular renderer)
 			document.getElementById('three-container').appendChild(effect.domElement);
 
-			// Custom 3D rotation controls for 404 text (X and Y axis)
-			let isDragging = false;
-			let previousMouseX = 0;
-			let previousMouseY = 0;
-			let rotationY = 0;
-			let rotationX = 0;
-			let animationStartTime = Date.now();
-
-			effect.domElement.addEventListener('mousedown', (event) => {
-				isDragging = true;
-				previousMouseX = event.clientX;
-				previousMouseY = event.clientY;
-				effect.domElement.style.cursor = 'grabbing';
-			});
-
-			effect.domElement.addEventListener('mousemove', (event) => {
-				if (!isDragging) return;
-				
-				const deltaX = event.clientX - previousMouseX;
-				const deltaY = event.clientY - previousMouseY;
-				
-				// Horizontal drag = Y-axis rotation (spin left/right)
-				rotationY += deltaX * 0.01;
-				// Vertical drag = X-axis rotation (flip up/down)
-				rotationX += deltaY * 0.01;
-				
-				if (text404Mesh) {
-					text404Mesh.rotation.x = rotationX;
-					text404Mesh.rotation.y = rotationY;
-				}
-				
-				previousMouseX = event.clientX;
-				previousMouseY = event.clientY;
-			});
-
-			effect.domElement.addEventListener('mouseup', () => {
-				isDragging = false;
-				effect.domElement.style.cursor = 'grab';
-				// Reset animation start time to continue from current position
-				animationStartTime = Date.now();
-			});
-
-			effect.domElement.addEventListener('mouseleave', () => {
-				isDragging = false;
-				effect.domElement.style.cursor = 'grab';
-				// Reset animation start time to continue from current position
-				animationStartTime = Date.now();
-			});
-
 			// Set initial cursor
 			effect.domElement.style.cursor = 'grab';
+			debug('[ASCII] Character buffer initialized, ready for render');
 
-			// Keyboard navigation support
-			const container = document.getElementById('three-container');
-			container.addEventListener('keydown', (event) => {
-				if (!text404Mesh) return;
-				
-				const rotationSpeed = 0.1;
-				let rotated = false;
-				
-				switch(event.key) {
-					case 'ArrowLeft':
-						rotationY -= rotationSpeed;
-						text404Mesh.rotation.y = rotationY;
-						rotated = true;
-						break;
-					case 'ArrowRight':
-						rotationY += rotationSpeed;
-						text404Mesh.rotation.y = rotationY;
-						rotated = true;
-						break;
-					case 'ArrowUp':
-						rotationX -= rotationSpeed;
-						text404Mesh.rotation.x = rotationX;
-						rotated = true;
-						break;
-					case 'ArrowDown':
-						rotationX += rotationSpeed;
-						text404Mesh.rotation.x = rotationX;
-						rotated = true;
-						break;
-					case 'Enter':
-					case ' ':
-						// Go to home page
-						window.location.href = '/';
-						break;
-				}
-				
-				if (rotated) {
-					event.preventDefault();
-					// Reset animation start time for smooth continuation
-					animationStartTime = Date.now();
-				}
-			});
-
-			debug('[SYSTEM] ASCII renderer initialized, framebuffer ready');
-
-			const start = Date.now();
 			let lastRenderTime = 0;
-			const targetFPS = 15; // Reduce from default ~60fps to 15fps for calmer ASCII
+			let animationRunning = false;
+			const clock = new THREE.Clock(); // Use Three.js Clock for proper timing
+			const rotationSpeed = 0.2; // Radians per second - constant speed
+			const targetFPS = 15; // Reduce ASCII chaos
 			const frameInterval = 1000 / targetFPS;
 
 			function animate() {
 				const currentTime = Date.now();
 				
-				// Add very slow automatic spinning animation
-				if (text404Mesh && !isDragging) {
-					// Only animate when not being dragged manually
-					const elapsedTime = (currentTime - animationStartTime) * 0.0001; // Very slow rotation speed
-					text404Mesh.rotation.y = rotationY + elapsedTime; // Add to manual rotation
+				// Continuous horizontal spinning - time-based for constant speed
+				if (text404Mesh) {
+					const deltaTime = clock.getDelta();
+					text404Mesh.rotation.y += rotationSpeed * deltaTime; // Constant speed regardless of framerate
+				}
+				
+				// Update controls like the original ASCII example
+				if (controls) {
+					controls.update();
 				}
 				
 				// Only render at target FPS to reduce ASCII chaos
@@ -484,8 +411,26 @@ import BaseHead from '../components/BaseHead.astro';
 					lastRenderTime = currentTime;
 				}
 				
-				requestAnimationFrame(animate);
+				if (animationRunning) {
+					requestAnimationFrame(animate);
+				}
 			}
+
+			function startAnimation() {
+				if (!animationRunning) {
+					animationRunning = true;
+					debug('[ANIM] Render loop thread started');
+					animate();
+				}
+			}
+
+			function stopAnimation() {
+				animationRunning = false;
+				debug('[ANIM] Render thread terminated');
+			}
+
+			// Start initial animation
+			startAnimation();
 
 			// Handle window resize
 			window.addEventListener('resize', () => {
@@ -494,13 +439,14 @@ import BaseHead from '../components/BaseHead.astro';
 
 				renderer.setSize(window.innerWidth, window.innerHeight);
 				effect.setSize(window.innerWidth, window.innerHeight);
+				
+				// Adjust camera distance based on new viewport width
+				camera.position.z = getCameraDistance();
 			});
-
-			debug('Animation started successfully!');
 
 		} catch (error) {
 			console.error('Three.js setup error:', error);
-			document.getElementById('debug').textContent = 'Error: ' + error.message;
+			document.getElementById('debug').textContent = '[FATAL] Error Encountered: Unable to initialize 3D graphics subsystem';
 		}
 	});
 </script>
