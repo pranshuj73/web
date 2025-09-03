@@ -1,0 +1,506 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+---
+
+<BaseHead title="404" description="Page not found!" />
+
+<style>
+	body {
+		margin: 0;
+		padding: 0;
+		background: #000;
+		color: #fff;
+		font-family: monospace;
+		overflow: hidden;
+    position:relative;
+	}
+	#three-container {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		z-index: 1;
+		user-select: none;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+	}
+	#ascii-output {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 2;
+		background: transparent;
+		color: #0f0;
+		font-family: 'Courier New', monospace;
+		font-size: 6px;
+		line-height: 6px;
+		white-space: pre;
+		pointer-events: none;
+		user-select: none;
+	}
+	.error-info {
+		position: fixed;
+		bottom: 20px;
+		left: 20px;
+		z-index: 3;
+		background: rgba(0, 0, 0, 0.9);
+		backdrop-filter: blur(10px);
+		padding: 25px;
+		border-radius: 12px;
+		border: 2px solid #0f0;
+		box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+		min-width: 280px;
+	}
+	.error-info h1 {
+		margin: 0 0 10px 0;
+		color: #0f0;
+		font-size: 20px;
+		font-weight: bold;
+		text-shadow: 0 0 10px #0f0;
+	}
+	.error-info p {
+		margin: 0 0 8px 0;
+		color: #fff;
+		font-size: 12px;
+		line-height: 1.3;
+	}
+	.error-info a {
+		color: #0f0;
+		text-decoration: none;
+		border: 2px solid #0f0;
+    margin-top: 10px;
+		padding: 8px 16px;
+		border-radius: 6px;
+		transition: all 0.3s ease;
+		display: inline-block;
+		font-weight: bold;
+		font-size: 12px;
+		text-shadow: 0 0 5px #0f0;
+		box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+	}
+	.error-info a:hover {
+		background: #0f0;
+		color: #000;
+		box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+		transform: translateY(-2px);
+	}
+	#debug {
+		position: fixed;
+		bottom: 20px;
+		right: 20px;
+		z-index: 4;
+		background: rgba(0, 0, 0, 0.9);
+		backdrop-filter: blur(10px);
+		padding: 15px;
+		border-radius: 8px;
+		border: 1px solid #0f0;
+		font-size: 10px;
+		color: #0f0;
+		font-family: 'Courier New', monospace;
+		box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+		max-width: 300px;
+		word-wrap: break-word;
+	}
+
+	/* Mobile Responsive Styles */
+	@media (max-width: 768px) {
+		.error-info {
+			bottom: 20px;
+			left: 50%;
+			transform: translateX(-50%);
+			min-width: auto;
+			width: calc(100vw - 40px);
+			max-width: 350px;
+			padding: 20px;
+		}
+		
+		.error-info h1 {
+			font-size: 16px;
+			margin: 0 0 8px 0;
+		}
+		
+		.error-info p {
+			font-size: 10px;
+			margin: 0 0 6px 0;
+			line-height: 1.2;
+		}
+		
+		.error-info a {
+			font-size: 10px;
+			padding: 6px 12px;
+			margin-top: 8px;
+		}
+		
+		#debug {
+			display: none;
+		}
+	}
+
+	/* Accessibility styles */
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	.skip-link {
+		position: absolute;
+		top: -40px;
+		left: 6px;
+		background: #0f0;
+		color: #000;
+		padding: 8px;
+		text-decoration: none;
+		font-weight: bold;
+		border-radius: 4px;
+		z-index: 1000;
+		transition: top 0.3s;
+	}
+
+	.skip-link:focus {
+		top: 6px;
+	}
+
+	/* Focus styles for keyboard navigation */
+	#three-container:focus {
+		outline: 2px solid #0f0;
+		outline-offset: 2px;
+	}
+
+	.error-info a:focus {
+		outline: 2px solid #0f0;
+		outline-offset: 2px;
+		box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+	}
+	.page-not-found {
+		position: fixed;
+		top: 60%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		z-index: 3;
+		color: #0f0;
+		font-size: 24px;
+		font-family: monospace;
+		text-align: center;
+		text-shadow: 0 0 10px #0f0;
+		pointer-events: none;
+		user-select: none;
+	}
+</style>
+
+<div id="three-container" 
+     role="application" 
+     aria-label="Interactive 3D 404 error page with ASCII art renderer"
+     tabindex="0">
+
+  <!-- Screen reader content -->
+  <div class="sr-only">
+    <h1>404 Error - Page Not Found</h1>
+    <p>The page you are looking for could not be found. This page displays an interactive 3D "404" text that you can rotate by clicking and dragging with your mouse or touch device.</p>
+    <p>Use the "Go Home" button below to return to the main page.</p>
+  </div>
+
+  <div id="ascii-output" aria-hidden="true"></div>
+  <div id="debug" aria-hidden="true">Loading...</div>
+
+  <div class="error-info" role="alert">
+    <h1 id="error-title">KERNEL PANIC</h1>
+    <p>SEGMENTATION FAULT: Resource not found in memory space</p>
+    <p>Error 0x404: Null pointer exception at requested URL</p>
+    <p>Stack trace: Page allocation failed</p>
+    <a href="/" 
+       role="button"
+       aria-describedby="error-title"
+       aria-label="Return to home page">sudo reboot --to-home</a>
+  </div>
+
+</div>
+
+<!-- Skip link for keyboard navigation -->
+<a href="/" class="skip-link">Skip to home page</a>
+
+
+<script>
+	// Wait for DOM to be ready
+	document.addEventListener('DOMContentLoaded', async () => {
+		try {
+			// Dynamic import of Three.js and required addons
+			const THREE = await import('three');
+			const { AsciiEffect } = await import('three/addons/effects/AsciiEffect.js');
+			const { TrackballControls } = await import('three/addons/controls/TrackballControls.js');
+			
+			let camera, controls, scene, renderer, effect;
+			let text404Mesh;
+
+			function debug(message) {
+				console.log(message);
+				document.getElementById('debug').textContent = message;
+			}
+
+			debug('[INIT] Booting graphics subsystem...');
+
+			// Scene setup
+			camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 2000);
+			camera.position.set(0, 0, 600);
+			camera.lookAt(0, 0, 0);
+
+			scene = new THREE.Scene();
+			scene.background = new THREE.Color(0, 0, 0);
+
+			// Lighting
+			const pointLight1 = new THREE.PointLight(0xffffff, 3, 0, 0);
+			pointLight1.position.set(500, 500, 500);
+			scene.add(pointLight1);
+
+			const pointLight2 = new THREE.PointLight(0xffffff, 1, 0, 0);
+			pointLight2.position.set(-500, -500, -500);
+			scene.add(pointLight2);
+
+			// Create actual 3D text using TextGeometry
+			const { FontLoader } = await import('three/addons/loaders/FontLoader.js');
+			const { TextGeometry } = await import('three/addons/geometries/TextGeometry.js');
+			const loader = new FontLoader();
+			
+			// Load font and create real text (no fallback cubes needed)
+			debug('[LOADER] Fetching font binary from remote host...');
+			loader.load(
+				'https://threejs.org/examples/fonts/helvetiker_regular.typeface.json',
+				function(font) {
+					debug('[SUCCESS] Font binary decoded, compiling geometry...');
+					// Don't remove cubes yet - let's see if text renders first
+					
+					const textGeometry = new TextGeometry('404', {
+						font: font,
+						size: 200,
+						height: 50,
+						curveSegments: 12,
+						bevelEnabled: true,
+						bevelThickness: 5,
+						bevelSize: 3,
+						bevelOffset: 0,
+						bevelSegments: 5
+					});
+
+					// Center the geometry itself, not just position the mesh
+					textGeometry.computeBoundingBox();
+					const centerOffsetX = -0.5 * (textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x);
+					const centerOffsetY = -0.5 * (textGeometry.boundingBox.max.y - textGeometry.boundingBox.min.y);
+					const centerOffsetZ = -0.5 * (textGeometry.boundingBox.max.z - textGeometry.boundingBox.min.z);
+					
+					// Translate the geometry so its center is at origin
+					textGeometry.translate(centerOffsetX, centerOffsetY, centerOffsetZ);
+
+					const textMaterial = new THREE.MeshPhongMaterial({ 
+						color: 0x00ff00,
+						flatShading: true
+					});
+
+					text404Mesh = new THREE.Mesh(textGeometry, textMaterial);
+					// Position at origin - geometry is already centered
+					text404Mesh.position.set(0, 0, 0);
+					scene.add(text404Mesh);
+
+					debug('Text positioned at: ' + centerOffsetX + ', ' + centerOffsetY + ', 0');
+					debug('Scene children count: ' + scene.children.length);
+					debug('Text mesh added to scene: ' + (scene.children.includes(text404Mesh)));
+
+					debug('[RENDER] 3D mesh allocated, vertices loaded to GPU');
+				},
+				function(progress) {
+					debug('Font loading progress: ' + Math.round(progress.loaded / progress.total * 100) + '%');
+				},
+				function(error) {
+					debug('Font loading failed: ' + error.message + ' - using cubes');
+				}
+			);
+
+			function createFallbackCubes() {
+				// Fallback to cubes if font loading fails
+				const textGeometry = new THREE.BoxGeometry(80, 80, 80);
+				const textMaterial = new THREE.MeshPhongMaterial({ 
+					color: 0x00ff00,
+					flatShading: true
+				});
+
+				const four1 = new THREE.Mesh(textGeometry, textMaterial);
+				four1.position.set(-200, 0, 0);
+				scene.add(four1);
+				
+				const zero1 = new THREE.Mesh(textGeometry, textMaterial);
+				zero1.position.set(0, 0, 0);
+				scene.add(zero1);
+				
+				const four2 = new THREE.Mesh(textGeometry, textMaterial);
+				four2.position.set(200, 0, 0);
+				scene.add(four2);
+
+				text404Mesh = zero1; // Use center mesh for reference
+				debug('Fallback cubes created');
+			}
+
+			// No plane - just the text
+
+			debug('3D objects created');
+
+			// WebGL renderer
+			renderer = new THREE.WebGLRenderer();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			renderer.setAnimationLoop(animate);
+
+			// ASCII Effect - this is the key!
+			effect = new AsciiEffect(renderer, ' .:-+*=%@#', { invert: true });
+			effect.setSize(window.innerWidth, window.innerHeight);
+			effect.domElement.style.color = '#00ff00';
+			effect.domElement.style.backgroundColor = 'black';
+
+			// Append the ASCII effect to the container (not the regular renderer)
+			document.getElementById('three-container').appendChild(effect.domElement);
+
+			// Custom 3D rotation controls for 404 text (X and Y axis)
+			let isDragging = false;
+			let previousMouseX = 0;
+			let previousMouseY = 0;
+			let rotationY = 0;
+			let rotationX = 0;
+			let animationStartTime = Date.now();
+
+			effect.domElement.addEventListener('mousedown', (event) => {
+				isDragging = true;
+				previousMouseX = event.clientX;
+				previousMouseY = event.clientY;
+				effect.domElement.style.cursor = 'grabbing';
+			});
+
+			effect.domElement.addEventListener('mousemove', (event) => {
+				if (!isDragging) return;
+				
+				const deltaX = event.clientX - previousMouseX;
+				const deltaY = event.clientY - previousMouseY;
+				
+				// Horizontal drag = Y-axis rotation (spin left/right)
+				rotationY += deltaX * 0.01;
+				// Vertical drag = X-axis rotation (flip up/down)
+				rotationX += deltaY * 0.01;
+				
+				if (text404Mesh) {
+					text404Mesh.rotation.x = rotationX;
+					text404Mesh.rotation.y = rotationY;
+				}
+				
+				previousMouseX = event.clientX;
+				previousMouseY = event.clientY;
+			});
+
+			effect.domElement.addEventListener('mouseup', () => {
+				isDragging = false;
+				effect.domElement.style.cursor = 'grab';
+				// Reset animation start time to continue from current position
+				animationStartTime = Date.now();
+			});
+
+			effect.domElement.addEventListener('mouseleave', () => {
+				isDragging = false;
+				effect.domElement.style.cursor = 'grab';
+				// Reset animation start time to continue from current position
+				animationStartTime = Date.now();
+			});
+
+			// Set initial cursor
+			effect.domElement.style.cursor = 'grab';
+
+			// Keyboard navigation support
+			const container = document.getElementById('three-container');
+			container.addEventListener('keydown', (event) => {
+				if (!text404Mesh) return;
+				
+				const rotationSpeed = 0.1;
+				let rotated = false;
+				
+				switch(event.key) {
+					case 'ArrowLeft':
+						rotationY -= rotationSpeed;
+						text404Mesh.rotation.y = rotationY;
+						rotated = true;
+						break;
+					case 'ArrowRight':
+						rotationY += rotationSpeed;
+						text404Mesh.rotation.y = rotationY;
+						rotated = true;
+						break;
+					case 'ArrowUp':
+						rotationX -= rotationSpeed;
+						text404Mesh.rotation.x = rotationX;
+						rotated = true;
+						break;
+					case 'ArrowDown':
+						rotationX += rotationSpeed;
+						text404Mesh.rotation.x = rotationX;
+						rotated = true;
+						break;
+					case 'Enter':
+					case ' ':
+						// Go to home page
+						window.location.href = '/';
+						break;
+				}
+				
+				if (rotated) {
+					event.preventDefault();
+					// Reset animation start time for smooth continuation
+					animationStartTime = Date.now();
+				}
+			});
+
+			debug('[SYSTEM] ASCII renderer initialized, framebuffer ready');
+
+			const start = Date.now();
+			let lastRenderTime = 0;
+			const targetFPS = 15; // Reduce from default ~60fps to 15fps for calmer ASCII
+			const frameInterval = 1000 / targetFPS;
+
+			function animate() {
+				const currentTime = Date.now();
+				
+				// Add very slow automatic spinning animation
+				if (text404Mesh && !isDragging) {
+					// Only animate when not being dragged manually
+					const elapsedTime = (currentTime - animationStartTime) * 0.0001; // Very slow rotation speed
+					text404Mesh.rotation.y = rotationY + elapsedTime; // Add to manual rotation
+				}
+				
+				// Only render at target FPS to reduce ASCII chaos
+				if (currentTime - lastRenderTime >= frameInterval) {
+					effect.render(scene, camera);
+					lastRenderTime = currentTime;
+				}
+				
+				requestAnimationFrame(animate);
+			}
+
+			// Handle window resize
+			window.addEventListener('resize', () => {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				effect.setSize(window.innerWidth, window.innerHeight);
+			});
+
+			debug('Animation started successfully!');
+
+		} catch (error) {
+			console.error('Three.js setup error:', error);
+			document.getElementById('debug').textContent = 'Error: ' + error.message;
+		}
+	});
+</script>
