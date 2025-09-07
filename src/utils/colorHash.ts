@@ -1,3 +1,19 @@
+export const colors = [
+  'violet',
+  'lime',
+  'cyan',
+  'amber',
+  'indigo',
+  'emerald',
+  'fuchsia',
+  'sky',
+  'yellow',
+  'purple',
+  'orange',
+  'green',
+  'blue',
+];
+
 /**
  * Generates a color name based on the input string using a simple hash function
  * @param input - The string to generate a color for
@@ -5,21 +21,6 @@
  */
 export function getColorFromHash(input: string): string {
   // Define available colors (randomized order)
-  const colors = [
-    'violet',
-    'lime',
-    'cyan',
-    'amber',
-    'indigo',
-    'emerald',
-    'fuchsia',
-    'sky',
-    'yellow',
-    'purple',
-    'orange',
-    'green',
-    'blue',
-  ];
 
   // Simple hash function based on string length and character codes
   let hash = 0;
