@@ -2,19 +2,29 @@
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Base.astro";
+import BaseHead from "@/components/BaseHead.astro";
 import SectionHeading from "@/components/ui/SectionHeading.astro";
 import LeftArrowIcon from "@/icon/LeftArrowIcon.astro";
 import { calculateReadingTime } from "@/utils/readingTime";
+import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
+import FallbackImage from "@/assets/fallback.jpg";
 
 type Props = CollectionEntry<"blog">["data"] & { slug?: string };
 
 const { slug, title, description, pubDate, updatedDate, heroImage } =
   Astro.props;
 
+
 // Get the content from the slot to calculate reading time
 const content = Astro.slots.render("default");
 const readingTime = calculateReadingTime(await content);
 ---
+
+<BaseHead 
+  title={`${title}`} 
+  description={description || SITE_DESCRIPTION}
+  image={heroImage ? heroImage : FallbackImage}
+/>
 
 <Layout class="pt-24 pb-18">
   <!-- Terminal Header -->
