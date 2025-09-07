@@ -18,15 +18,15 @@ const { slug, title, description, pubDate, updatedDate, heroImage } =
 // Get the content from the slot to calculate reading time
 const content = Astro.slots.render("default");
 const readingTime = calculateReadingTime(await content);
+
+const meta = {
+  title: `${title}`, 
+  description: description || SITE_DESCRIPTION,
+  image: heroImage ? heroImage : FallbackImage,
+}
 ---
 
-<BaseHead 
-  title={`${title}`} 
-  description={description || SITE_DESCRIPTION}
-  image={heroImage ? heroImage : FallbackImage}
-/>
-
-<Layout class="pt-24 pb-18">
+<Layout class="pt-24 pb-18" meta={meta}>
   <!-- Terminal Header -->
   <div class="flex items-center justify-between pb-4 font-mono">
     <SectionHeading command="cat" heading={slug} extension="md" />

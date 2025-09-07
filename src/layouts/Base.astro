@@ -4,14 +4,19 @@
 import '../styles/global.css';
 import BaseHead from '../components/BaseHead.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import MetaImage from '@/assets/meta.jpg';
 
-const { class: className } = Astro.props;
+const { class: className, meta = null} = Astro.props;
+
+const metaImage = meta?.image || MetaImage;
+const metaTitle = meta?.title || SITE_TITLE;
+const metaDescription = meta?.description || SITE_DESCRIPTION;
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead title={metaTitle} description={metaDescription} image={metaImage} />
 	</head>
 	<body class="dark bg-black text-neutral-300">
     <main class={`flex flex-col gap-12 max-w-3xl mx-auto px-4 ${className}`}>
