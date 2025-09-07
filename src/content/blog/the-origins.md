@@ -1,8 +1,8 @@
 ---
 title: 'the origin story'
-description: 'lore drop goes crazy'
+description: 'here comes the lore drop'
 pubDate: 'Sep 07 2025'
-heroImage: '@/assets/blog-placeholder-3.jpg'
+heroImage: '@/assets/first-time-using-linux.jpg'
 ---
 
 ## chapter 0: the beginnings
