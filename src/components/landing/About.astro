@@ -18,8 +18,21 @@ const latestProject = projectsData.projects[0];
       <p class="text-neutral-400">{tagline}</p>
     </div>
   </div>
-  
+
   <!-- About -->
   <p>{about}</p>
-  <p>currently working on something called <a href={latestProject.url} target="_blank" rel="noopener noreferrer" class="lowercase text-yellow-500 hover:text-yellow-600">{latestProject.name}</a></p>
+  <p>
+    currently working on something called
+    <a
+      href={latestProject.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="lowercase text-yellow-500 hover:text-yellow-600"
+    >{latestProject.name}</a>
+    and writing my
+    <a
+      href="/blog"
+      class="lowercase text-yellow-500 hover:text-yellow-600"
+    >blogs here</a>.
+  </p>
 </section>

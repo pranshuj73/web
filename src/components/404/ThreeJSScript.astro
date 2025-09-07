@@ -1,0 +1,217 @@
+<script>
+	// Wait for DOM to be ready
+	document.addEventListener('DOMContentLoaded', async () => {
+		// Dynamic camera distance based on viewport width
+		function getCameraDistance() {
+			const width = window.innerWidth;
+			
+			if (width <= 480) {
+				return 900; // Small phones
+			} else if (width <= 768) {
+				return 700; // Large phones / small tablets
+			} else if (width <= 1024) {
+				return 650; // Tablets / small laptops
+			} else {
+				return 600; // Standard desktops
+			}
+		}
+
+		function debug(message) {
+			document.getElementById('debug').textContent = message;
+		}
+
+		try {
+			// Dynamic import of Three.js and required addons
+			const THREE = await import('three');
+			const { AsciiEffect } = await import('three/addons/effects/AsciiEffect.js');
+			const { TrackballControls } = await import('three/addons/controls/TrackballControls.js');
+			
+			let camera, controls, scene, renderer, effect;
+			let text404Mesh;
+
+
+			debug('[KERN] Initializing 3D graphics subsystem...');
+
+			// Scene setup
+			camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 2000);
+			// Set camera distance based on viewport width
+			camera.position.set(0, 0, getCameraDistance());
+			camera.lookAt(0, 0, 0);
+
+			scene = new THREE.Scene();
+			scene.background = new THREE.Color(0, 0, 0);
+
+			// Lighting
+			const pointLight1 = new THREE.PointLight(0xffffff, 3, 0, 0);
+			pointLight1.position.set(500, 500, 500);
+			scene.add(pointLight1);
+
+			const pointLight2 = new THREE.PointLight(0xffffff, 1, 0, 0);
+			pointLight2.position.set(-500, -500, -500);
+			scene.add(pointLight2);
+
+			// Create actual 3D text using TextGeometry
+			const { FontLoader } = await import('three/addons/loaders/FontLoader.js');
+			const { TextGeometry } = await import('three/addons/geometries/TextGeometry.js');
+			const loader = new FontLoader();
+			
+			// Load font and create real text (no fallback cubes needed)
+			debug('[NET] Downloading font binary from CDN...');
+			loader.load(
+				'https://threejs.org/examples/fonts/helvetiker_regular.typeface.json',
+				function(font) {
+					debug('[FONT] Binary decoded, compiling mesh geometry...');
+					
+					const baseSize = 200;
+					const baseBevelThickness = 5;
+					const baseBevelSize = 3;
+
+					const textGeometry = new TextGeometry('404', {
+						font: font,
+						size: baseSize,
+						curveSegments: 12,
+						bevelEnabled: true,
+						bevelThickness: baseBevelThickness,
+						bevelSize: baseBevelSize,
+						bevelOffset: 0,
+						bevelSegments: 5
+					});
+
+					// Center the geometry itself, not just position the mesh
+					textGeometry.computeBoundingBox();
+					const centerOffsetX = -0.5 * (textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x);
+					const centerOffsetY = -0.5 * (textGeometry.boundingBox.max.y - textGeometry.boundingBox.min.y);
+					const centerOffsetZ = -0.5 * (textGeometry.boundingBox.max.z - textGeometry.boundingBox.min.z);
+					
+					// Translate the geometry so its center is at origin
+					textGeometry.translate(centerOffsetX, centerOffsetY, centerOffsetZ);
+
+					const textMaterial = new THREE.MeshPhongMaterial({ 
+						color: 0x00ff00,
+						flatShading: true
+					});
+
+					text404Mesh = new THREE.Mesh(textGeometry, textMaterial);
+					// Position at origin - geometry is already centered
+					text404Mesh.position.set(0, 0, 0);
+					scene.add(text404Mesh);
+
+					debug('[GEOM] Text mesh centered and positioned');
+					debug('[SCENE] Objects registered in render queue');
+					debug('[MESH] 404 geometry added to world space');
+
+					debug('[GPU] Mesh uploaded to graphics memory');
+					
+					// Initialize TrackballControls like the original ASCII example
+					import('three/addons/controls/TrackballControls.js').then(({ TrackballControls }) => {
+						controls = new TrackballControls(camera, effect.domElement);
+						
+						// Configure controls to only allow rotation (no zoom/pan)
+						controls.noZoom = true;
+						controls.noPan = true;
+						controls.rotateSpeed = 3.0; // Increase sensitivity for easier dragging
+						controls.staticMoving = true;
+						controls.dynamicDampingFactor = 0.3;
+						
+						debug('[INPUT] Touch/mouse handlers initialized');
+						debug('[RENDER] 3D mesh allocated, vertices loaded to GPU');
+					});
+					
+					// Restart animation now that text mesh is ready
+					stopAnimation();
+					startAnimation();
+				},
+				function(progress) {
+					debug('[NET] Transfer ' + Math.round(progress.loaded / progress.total * 100) + '% complete');
+				},
+				function(error) {
+					debug('[ERR] Font download failed, fallback active');
+				}
+			);
+
+			debug('[MESH] 3D objects loaded into scene graph');
+
+			// WebGL renderer
+			renderer = new THREE.WebGLRenderer();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			renderer.setAnimationLoop(animate);
+
+			// ASCII Effect - this is the key!
+			effect = new AsciiEffect(renderer, ' .:-+*=%@#', { invert: true });
+			effect.setSize(window.innerWidth, window.innerHeight);
+			effect.domElement.style.color = '#00ff00';
+			effect.domElement.style.backgroundColor = 'black';
+
+			// Append the ASCII effect to the container (not the regular renderer)
+			document.getElementById('three-container').appendChild(effect.domElement);
+
+			// Set initial cursor
+			effect.domElement.style.cursor = 'grab';
+			debug('[ASCII] Character buffer initialized, ready for render');
+
+			let lastRenderTime = 0;
+			let animationRunning = false;
+			const clock = new THREE.Clock(); // Use Three.js Clock for proper timing
+			const rotationSpeed = 0.2; // Radians per second - constant speed
+			const targetFPS = 15; // Reduce ASCII chaos
+			const frameInterval = 1000 / targetFPS;
+
+			function animate() {
+				const currentTime = Date.now();
+				
+				// Continuous horizontal spinning - time-based for constant speed
+				if (text404Mesh) {
+					const deltaTime = clock.getDelta();
+					text404Mesh.rotation.y += rotationSpeed * deltaTime; // Constant speed regardless of framerate
+				}
+				
+				// Update controls like the original ASCII example
+				if (controls) {
+					controls.update();
+				}
+				
+				// Only render at target FPS to reduce ASCII chaos
+				if (currentTime - lastRenderTime >= frameInterval) {
+					effect.render(scene, camera);
+					lastRenderTime = currentTime;
+				}
+				
+				if (animationRunning) {
+					requestAnimationFrame(animate);
+				}
+			}
+
+			function startAnimation() {
+				if (!animationRunning) {
+					animationRunning = true;
+					debug('[ANIM] Render loop thread started');
+					animate();
+				}
+			}
+
+			function stopAnimation() {
+				animationRunning = false;
+				debug('[ANIM] Render thread terminated');
+			}
+
+			// Start initial animation
+			startAnimation();
+
+			// Handle window resize
+			window.addEventListener('resize', () => {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				effect.setSize(window.innerWidth, window.innerHeight);
+				
+				// Adjust camera distance based on new viewport width
+				camera.position.z = getCameraDistance();
+			});
+
+		} catch (error) {
+			console.error('Three.js setup error:', error);
+			document.getElementById('debug').textContent = '[FATAL] Error Encountered: Unable to initialize 3D graphics subsystem';
+		}
+	});
+</script>

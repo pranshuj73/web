@@ -28,6 +28,14 @@
   .text-lg {
     @apply text-lg;
   }
+
+  article h1, h2, h3, h4, h5, h6 {
+    @apply font-mono;
+  }
+
+  article hr {
+    @apply border-neutral-600 border-dashed;
+  }
 }
 
 @layer components {
