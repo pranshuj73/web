@@ -17,38 +17,39 @@ const readingTime = calculateReadingTime(await content);
 ---
 
 <Layout class="pt-24 pb-18">
-  <article class="space-y-6">
-    <!-- Terminal Header -->
-    <div class="space-y-4 font-mono">
-      <div class="flex items-center justify-between pb-4">
-        <SectionHeading command="cat" heading={slug} extension="md" />
-        <a href="/blog/" class="text-neutral-400 hover:text-blue-400 transition-colors text-sm flex items-center space-x-1">
-          <LeftArrowIcon class="size-4" />
-          <span>cd ..</span>
-        </a>
-      </div>
+  <!-- Terminal Header -->
+  <div class="flex items-center justify-between pb-4 font-mono">
+    <SectionHeading command="cat" heading={slug} extension="md" />
+    <a
+      href="/blog/"
+      class="text-neutral-400 hover:text-blue-400 transition-colors text-sm flex items-center space-x-1"
+    >
+      <LeftArrowIcon class="size-4" />
+      <span>cd ..</span>
+    </a>
+  </div>
 
-      <!-- Hero Image -->
+  <article class="space-y-6">
+    <!-- Hero Image -->
+    {
+      heroImage && (
+        <Image
+          width={1020}
+          height={510}
+          src={heroImage}
+          alt={title}
+          class="w-full h-64 md:h-96 object-cover rounded"
+        />
+      )
+    }
+
+    <div class="space-y-4 pt-2 font-mono">
+      <h1 class="text-xl font-bold">{title}</h1>
       {
-        heroImage && (
-            <Image
-              width={1020}
-              height={510}
-              src={heroImage}
-              alt={title}
-              class="w-full h-64 md:h-96 object-cover rounded"
-            />
+        description && (
+          <p class="text-neutral-400 text-sm -mt-2">{description}</p>
         )
       }
-
-      <div class="space-y-4 pt-2">
-        <h1 class="text-xl font-bold">{title}</h1>
-        {
-          description && (
-            <p class="text-neutral-400 text-sm -mt-2">{description}</p>
-          )
-        }
-      </div>
     </div>
 
     <!-- Article Content -->

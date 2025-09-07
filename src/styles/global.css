@@ -36,6 +36,14 @@
   article hr {
     @apply border-neutral-600 border-dashed;
   }
+
+  article a {
+    @apply text-cyan-500 hover:text-cyan-600 border-b pb-1 border-current border-dashed;
+  }
+
+  .highlight {
+    @apply border-b pb-1 border-current border-dashed;
+  }
 }
 
 @layer components {

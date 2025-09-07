@@ -1,4 +1,5 @@
 ---
+import { getTextColorFromHash } from '@/utils/colorHash';
 import projectsData from '../../data/projects.json';
 
 const name = "Pranshu Jha";
@@ -7,6 +8,7 @@ const age = new Date().getFullYear() - 2004;
 const about = `i'm ${age}-year-old developer, passionate about building scalable systems and projects with a real-world impact.`;
 
 const latestProject = projectsData.projects[0];
+const projectColorClass = getTextColorFromHash(latestProject.name, true);
 ---
 
 <section class="space-y-6">
@@ -27,12 +29,12 @@ const latestProject = projectsData.projects[0];
       href={latestProject.url}
       target="_blank"
       rel="noopener noreferrer"
-      class="lowercase text-yellow-500 hover:text-yellow-600"
+      class={`lowercase ${projectColorClass} highlight`}
     >{latestProject.name}</a>
     &
     <a
       href="/blog"
-      class="lowercase text-yellow-500 hover:text-yellow-600"
+      class="lowercase text-cyan-500 hover:text-cyan-600 highlight"
     >dumping my thoughts here</a>.
   </p>
 </section>
