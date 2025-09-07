@@ -14,7 +14,7 @@
   }
   
   h2 {
-    @apply text-base font-bold text-white mb-4;
+    @apply text-base font-bold text-white;
   }
   
   h3 {

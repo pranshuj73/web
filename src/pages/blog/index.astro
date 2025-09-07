@@ -20,6 +20,9 @@ const posts = (await getCollection('blog')).sort(
         <span>cd ..</span>
       </a>
     </div>
+    <p class="text-neutral-400 text-sm font-mono -mt-2 pb-2">
+      here you can find all my thoughts dumped in a neatly organized & readable format.
+    </p>
     
     <div class="space-y-4">
       {posts.map((post) => (
@@ -46,7 +49,7 @@ const posts = (await getCollection('blog')).sort(
                     height={80} 
                     src={post.data.heroImage} 
                     alt={post.data.title}
-                    class="w-24 h-16 object-cover border border-neutral-700"
+                    class="w-24 h-16 object-cover rounded"
                   />
                 </div>
               )}

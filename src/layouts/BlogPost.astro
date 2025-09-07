@@ -4,19 +4,12 @@ import type { CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Base.astro";
 import SectionHeading from "@/components/ui/SectionHeading.astro";
 import LeftArrowIcon from "@/icon/LeftArrowIcon.astro";
+import { calculateReadingTime } from "@/utils/readingTime";
 
 type Props = CollectionEntry<"blog">["data"] & { slug?: string };
 
 const { slug, title, description, pubDate, updatedDate, heroImage } =
   Astro.props;
-
-// Calculate estimated reading time
-function calculateReadingTime(content: string): number {
-  const wordsPerMinute = 200; // Average reading speed
-  const words = content.trim().split(/\s+/).length;
-  const minutes = Math.ceil(words / wordsPerMinute);
-  return minutes;
-}
 
 // Get the content from the slot to calculate reading time
 const content = Astro.slots.render("default");
@@ -27,7 +20,7 @@ const readingTime = calculateReadingTime(await content);
   <article class="space-y-6">
     <!-- Terminal Header -->
     <div class="space-y-4 font-mono">
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between pb-4">
         <SectionHeading command="cat" heading={slug} extension="md" />
         <a href="/blog/" class="text-neutral-400 hover:text-blue-400 transition-colors text-sm flex items-center space-x-1">
           <LeftArrowIcon class="size-4" />
@@ -38,15 +31,13 @@ const readingTime = calculateReadingTime(await content);
       <!-- Hero Image -->
       {
         heroImage && (
-          <div class="border border-neutral-700 rounded p-2">
             <Image
               width={1020}
               height={510}
               src={heroImage}
               alt={title}
-              class="w-full h-64 md:h-96 object-cover"
+              class="w-full h-64 md:h-96 object-cover rounded"
             />
-          </div>
         )
       }
 
