@@ -33,4 +33,4 @@ then i derailed into **react native** for a bit, built random apps, circled back
 
 ### chapter 3: today
 
-fast forward to now (the post college era), i’m working as a **data engineer**. right now my focus is to learn how to build systems at scale and not just rely on duct tape and prayers. im also super interested into real world applications of generative ai and how it can be used to accelerate development.
+fast forward to now (the post college era), i’m working as a **data engineer**. right now my focus is to learn how to build systems at scale and not just rely on duct tape and prayers. im also very intrigued by generative ai and their possible applications.
