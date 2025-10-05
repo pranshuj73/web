@@ -54,7 +54,7 @@ const meta = {
     }
 
     <div class="space-y-4 pt-2 font-mono">
-      <h1 class="text-xl font-bold">{title}</h1>
+      <h1 class="font-pixel text-xl font-bold">{title}</h1>
       {
         description && (
           <p class="text-neutral-400 text-sm -mt-2">{description}</p>
@@ -63,12 +63,12 @@ const meta = {
     </div>
 
     <!-- Article Content -->
-    <div class="space-y-6 py-2">
+    <div class="flex flex-col gap-4 py-2">
       <slot />
     </div>
 
     <div
-      class="flex flex-col space-y-2 text-sm text-neutral-400 font-mono border-t border-neutral-700 pt-8 mt-8"
+      class="flex flex-col space-y-2 text-sm text-neutral-400 font-mono border-t border-neutral-700 pt-6 mt-10"
     >
       <span>created: {pubDate.toISOString()}</span>
       <span>

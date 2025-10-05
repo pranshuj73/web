@@ -30,11 +30,12 @@
   }
 
   article h1, h2, h3, h4, h5, h6 {
-    @apply font-mono;
+    font-family: var(--font-pixel);
+    @apply tracking-wider font-black text-lg;
   }
 
   article hr {
-    @apply border-neutral-600 border-dashed;
+    @apply border-neutral-600 border-dashed my-4;
   }
 
   article a {
@@ -43,6 +44,11 @@
 
   .highlight {
     @apply border-b pb-1 border-current border-dashed;
+  }
+
+  .font-pixel {
+    font-family: var(--font-pixel);
+    @apply tracking-wider font-black;
   }
 }
 
