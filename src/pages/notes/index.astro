@@ -10,7 +10,7 @@ import SectionHeading from "@/components/ui/SectionHeading.astro";
 import LeftArrowIcon from "@/icon/LeftArrowIcon.astro";
 
 
-const posts = (await getCollection("blog", ({ data }) => !data.hidden)).sort(
+const posts = (await getCollection("notes", ({ data }) => !data.hidden)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 ---
@@ -28,8 +28,7 @@ const posts = (await getCollection("blog", ({ data }) => !data.hidden)).sort(
       </a>
     </div>
     <p class="text-neutral-400 text-sm font-mono -mt-2 pb-2">
-      here you can find all my thoughts dumped in a neatly organized & readable
-      format.
+      on this corner of my site you'll find notes i've taken whilst learning &amp; exploring certain topics [warning: some notes might be stubs]
     </p>
 
     <div class="space-y-4">

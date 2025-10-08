@@ -9,11 +9,10 @@ import { calculateReadingTime } from "@/utils/readingTime";
 import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
 import FallbackImage from "@/assets/fallback.jpg";
 
-type Props = CollectionEntry<"blog">["data"] & { slug?: string };
+type Props = CollectionEntry<"blog">["data"];
 
 const { slug, title, description, pubDate, updatedDate, heroImage } =
   Astro.props;
-
 
 // Get the content from the slot to calculate reading time
 const content = Astro.slots.render("default");
@@ -22,7 +21,7 @@ const readingTime = calculateReadingTime(await content);
 const meta = {
   title: `${title}`, 
   description: description || SITE_DESCRIPTION,
-  image: heroImage ? heroImage : FallbackImage,
+  image: heroImage ? heroImage : `${Astro.site}${Astro.params.slug}/og.png`,
 }
 ---
 
@@ -54,7 +53,7 @@ const meta = {
     }
 
     <div class="space-y-4 pt-2 font-mono">
-      <h1 class="font-pixel text-xl font-bold">{title}</h1>
+      <h1 class="font-pixel text-2xl font-bold">{title}</h1>
       {
         description && (
           <p class="text-neutral-400 text-sm -mt-2">{description}</p>
@@ -63,7 +62,7 @@ const meta = {
     </div>
 
     <!-- Article Content -->
-    <div class="flex flex-col gap-4 py-2">
+    <div class="flex flex-col gap-4 py-2 text-neutral-300">
       <slot />
     </div>
 
