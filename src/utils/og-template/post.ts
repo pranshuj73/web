@@ -8,14 +8,14 @@ function safeText(text: string) {
   return text.replace(emojiPattern, "").trim();
 }
 
-type PostProps = (CollectionEntry<"blog">["data"] | CollectionEntry<"notes">["data"]);
+type PostProps = (CollectionEntry<"blog"> | CollectionEntry<"notes">);
 
 export default async (post: PostProps) => {
-  const atkinsonFontPath = path.resolve("./public/fonts/atkinson-bold.ttf");
+  const atkinsonFontPath = path.resolve("./public/fonts/atkinson-bold.woff");
   const atkinsonFontBuffer = fs.readFileSync(atkinsonFontPath);
 
   // Get the background image as base64
-  const bgImagePath = path.resolve("./public/images/og.png");
+  const bgImagePath = path.resolve("./public/assets/og.png");
   const bgImageBuffer = fs.readFileSync(bgImagePath);
 
   // Create the structure using vanilla JS objects instead of JSX
