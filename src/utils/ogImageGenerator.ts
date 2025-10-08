@@ -8,7 +8,7 @@ function svgBufferToPngBuffer(svg: Buffer | string) {
   return pngData.asPng();
 }
 
-type PostProps = (CollectionEntry<"blog">["data"] | CollectionEntry<"notes">["data"]);
+type PostProps = (CollectionEntry<"blog"> | CollectionEntry<"notes">);
 
 export async function generateOGImage({ post }: {post : PostProps}) {
   const svg = await postOgImage(post);

@@ -10,21 +10,11 @@ const notes = defineCollection({
 			title: z.string(),
 			description: z.string(),
 			stub: z.boolean().default(true),
-			// Transform string to Date object
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			heroImage: image().optional(),
-			slug: z.string().optional(),
 			hidden: z.boolean().default(false)
-		}).transform((data) => ({
-			...data,
-			slug: data.slug || data.title
-				.toLowerCase()
-				.replace(/[^a-z0-9\s-]/g, '')
-				.replace(/\s+/g, '-')
-				.replace(/-+/g, '-')
-				.trim()
-		})),
+		}),
 });
 
 const blog = defineCollection({
@@ -35,21 +25,12 @@ const blog = defineCollection({
 		z.object({
 			title: z.string(),
 			description: z.string(),
-			// Transform string to Date object
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			heroImage: image(),
 			slug: z.string().optional(),
 			hidden: z.boolean().default(false)
-		}).transform((data) => ({
-			...data,
-			slug: data.slug || data.title
-				.toLowerCase()
-				.replace(/[^a-z0-9\s-]/g, '')
-				.replace(/\s+/g, '-')
-				.replace(/-+/g, '-')
-				.trim()
-		})),
+		}),
 });
 
 export const collections = { notes, blog };

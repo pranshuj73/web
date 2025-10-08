@@ -6,7 +6,7 @@ export async function getStaticPaths() {
   const posts = (await getCollection("notes", ({ data }) => !data.hidden));
 
   return posts.map(post => ({
-    params: { slug: post.data.slug },
+    params: { slug: post.id },
     props: { post },
   }));
 }

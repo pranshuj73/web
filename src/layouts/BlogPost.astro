@@ -7,21 +7,31 @@ import SectionHeading from "@/components/ui/SectionHeading.astro";
 import LeftArrowIcon from "@/icon/LeftArrowIcon.astro";
 import { calculateReadingTime } from "@/utils/readingTime";
 import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
-import FallbackImage from "@/assets/fallback.jpg";
 
-type Props = CollectionEntry<"blog">["data"] | CollectionEntry<"notes">["data"];
+type Props = (CollectionEntry<"blog">["data"] | CollectionEntry<"notes">["data"]) & {slug?: string};
+type SiteMetadata = {
+	title: string;
+	description: string;
+	image?: ImageMetadata;
+}
 
 const { slug, title, description, pubDate, updatedDate, heroImage } =
   Astro.props;
 
-// Get the content from the slot to calculate reading time
 const content = Astro.slots.render("default");
 const readingTime = calculateReadingTime(await content);
 
-const meta = {
+const OGImage = {
+  src: `${Astro.site}${slug}/og.png`,
+  width: 2400,
+  height: 1260,
+  format: 'png' as const
+}
+
+const meta: SiteMetadata = {
   title: `${title}`, 
   description: description || SITE_DESCRIPTION,
-  image: heroImage ? heroImage : `${Astro.site}${Astro.params.slug}/og.png`,
+  image: heroImage && heroImage.src ? heroImage : OGImage,
 }
 ---
 
@@ -43,9 +53,9 @@ const meta = {
     {
       heroImage && (
         <Image
-          width={1020}
-          height={510}
-          src={heroImage}
+          width={1200}
+          height={630}
+          src={heroImage ? heroImage : OGImage}
           alt={title}
           class="w-full h-64 md:h-96 object-cover rounded"
         />

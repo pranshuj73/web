@@ -26,10 +26,11 @@ export default async (post: PostProps) => {
         style: {
           width: "100%",
           height: "100%",
+          padding: "2.5%",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          alignItems: "center",
+          alignItems: "flex-start",
           background: `url('data:image/png;base64,${bgImageBuffer.toString("base64")}')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -42,9 +43,9 @@ export default async (post: PostProps) => {
               style: {
                 fontSize: 82,
                 fontWeight: "bold",
-                color: "#222222",
-                textAlign: "center",
-                maxWidth: "85%",
+                color: "#abacad",
+                textAlign: "left",
+                maxWidth: "65%",
                 maxHeight: "100%",
                 overflow: "hidden",
                 fontFamily: "atkinson",
@@ -57,8 +58,8 @@ export default async (post: PostProps) => {
       },
     },
     {
-      width: 1200,
-      height: 630,
+      width: 2400,
+      height: 1260,
       embedFont: true,
       fonts: [
         {
