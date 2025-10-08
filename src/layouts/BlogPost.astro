@@ -8,14 +8,14 @@ import LeftArrowIcon from "@/icon/LeftArrowIcon.astro";
 import { calculateReadingTime } from "@/utils/readingTime";
 import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
 
-type Props = (CollectionEntry<"blog">["data"] | CollectionEntry<"notes">["data"]) & {slug?: string};
+type Props = (CollectionEntry<"blog">["data"] | CollectionEntry<"notes">["data"]) & {slug?: string; collection?: "blog" | "notes"};
 type SiteMetadata = {
 	title: string;
 	description: string;
 	image?: ImageMetadata;
 }
 
-const { slug, title, description, pubDate, updatedDate, heroImage } =
+const { slug, title, description, pubDate, updatedDate, heroImage, collection } =
   Astro.props;
 
 const content = Astro.slots.render("default");
@@ -40,7 +40,7 @@ const meta: SiteMetadata = {
   <div class="flex items-center justify-between pb-4 font-mono">
     <SectionHeading command="cat" heading={slug} extension="md" />
     <a
-      href="/blog/"
+      href={`/${collection}/`}
       class="text-neutral-400 hover:text-blue-400 transition-colors text-sm flex items-center space-x-1"
     >
       <LeftArrowIcon class="size-4" />
@@ -53,9 +53,9 @@ const meta: SiteMetadata = {
     {
       heroImage && (
         <Image
-          width={1200}
-          height={630}
-          src={heroImage ? heroImage : OGImage}
+          width={1020}
+          height={510}
+          src={heroImage}
           alt={title}
           class="w-full h-64 md:h-96 object-cover rounded"
         />

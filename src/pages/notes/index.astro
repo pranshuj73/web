@@ -51,7 +51,7 @@ const posts = (await getCollection("notes", ({ data }) => !data.hidden)).sort(
                   </p>
                 )}
               </div>
-              {post.data.heroImage ? (
+              {post.data.heroImage && (
                 <Image
                   width={120}
                   height={80}
@@ -59,14 +59,6 @@ const posts = (await getCollection("notes", ({ data }) => !data.hidden)).sort(
                   alt={post.data.title}
                   class="h-20 w-auto aspect-video object-cover rounded"
                 />
-                ) : (
-                  <Image
-                    width={120}
-                    height={80}
-                    src={`${Astro.site}${post.id}/og.png`}
-                    alt={post.data.title}
-                    class="h-20 w-auto aspect-video object-cover rounded"
-                  />
                 )}
             </div>
           </div>

@@ -18,6 +18,6 @@ const { slug } = Astro.params;
 const { Content } = await render(post);
 ---
 
-<BlogPost {...post.data} slug={slug}>
+<BlogPost {...post.data} slug={slug} collection="blog">
 	<Content />
 </BlogPost>
