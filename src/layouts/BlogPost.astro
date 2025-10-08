@@ -9,7 +9,7 @@ import { calculateReadingTime } from "@/utils/readingTime";
 import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
 import FallbackImage from "@/assets/fallback.jpg";
 
-type Props = CollectionEntry<"blog">["data"];
+type Props = CollectionEntry<"blog">["data"] | CollectionEntry<"notes">["data"];
 
 const { slug, title, description, pubDate, updatedDate, heroImage } =
   Astro.props;

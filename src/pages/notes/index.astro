@@ -18,7 +18,7 @@ const posts = (await getCollection("notes", ({ data }) => !data.hidden)).sort(
 <Layout class="pt-24 pb-6">
   <section class="space-y-6">
     <div class="flex items-center justify-between">
-      <SectionHeading command="ls -la" heading="./blog" extension="" />
+      <SectionHeading command="ls -la" heading="./notes" extension="" />
       <a
         href="/"
         class="text-neutral-400 hover:text-blue-400 transition-colors text-sm flex items-center space-x-1 font-mono"
@@ -28,12 +28,15 @@ const posts = (await getCollection("notes", ({ data }) => !data.hidden)).sort(
       </a>
     </div>
     <p class="text-neutral-400 text-sm font-mono -mt-2 pb-2">
-      on this corner of my site you'll find notes i've taken whilst learning &amp; exploring certain topics [warning: some notes might be stubs]
+    on this corner of my site you'll find notes i've taken whilst learning &amp; exploring certain topics
+    </p>
+    <p class="text-neutral-400 text-sm font-mono -mt-2 pb-2">
+      [warning: some notes might be stubs]
     </p>
 
     <div class="space-y-4">
       {posts.map((post) => (
-        <a href={`/blog/${post.id}/`} class="block group">
+        <a href={`/notes/${post.id}/`} class="block group">
           <div class="border-l-2 border-neutral-700 border-dotted pl-4 py-2 hover:border-neutral-500 transition-colors cursor-pointer">
             <div class="flex items-start justify-center space-x-4">
               <div class="flex-1 flex flex-col space-y-1 font-mono">
