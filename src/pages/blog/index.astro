@@ -1,76 +1,15 @@
 ---
-import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
-
-import Layout from "@/layouts/Base.astro";
-
-import FormattedDate from "@/components/FormattedDate.astro";
-import SectionHeading from "@/components/ui/SectionHeading.astro";
-
-import LeftArrowIcon from "@/icon/LeftArrowIcon.astro";
-
+import PostList from "@/layouts/PostList.astro";
 
 const posts = (await getCollection("blog", ({ data }) => !data.hidden)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 ---
 
-<Layout class="pt-24 pb-6">
-  <section class="space-y-6">
-    <div class="flex items-center justify-between">
-      <SectionHeading command="ls -la" heading="./blog" extension="" />
-      <a
-        href="/"
-        class="text-neutral-400 hover:text-blue-400 transition-colors text-sm flex items-center space-x-1 font-mono"
-      >
-        <LeftArrowIcon class="size-4" />
-        <span>cd ..</span>
-      </a>
-    </div>
-    <p class="text-neutral-400 text-sm font-mono -mt-2 pb-2">
-      here you can find all my thoughts dumped in a neatly organized & readable
-      format.
-    </p>
+<PostList
+  heading={"here you can find all my thoughts dumped in a neatly organized & readable format."}
+  posts={posts}
+  collectionType="blog"
+/>
 
-    <div class="space-y-4">
-      {posts.map((post) => (
-        <a href={`/blog/${post.id}/`} class="block group">
-          <div class="border-l-2 border-neutral-700 border-dotted pl-4 py-2 hover:border-neutral-500 transition-colors cursor-pointer">
-            <div class="flex items-start justify-center space-x-4">
-              <div class="flex-1 flex flex-col space-y-1 font-mono">
-                <span class="text-neutral-500 text-xs">
-                  <FormattedDate date={post.data.pubDate} />
-                </span>
-                <span class="font-pixel text-white group-hover:text-blue-400 transition-colors mb-1.5 mt-2 text-md">
-                  {post.data.title}.md
-                </span>
-                {post.data.description && (
-                  <p class="text-neutral-400 text-sm">
-                    {post.data.description}
-                  </p>
-                )}
-              </div>
-              {post.data.heroImage && (
-                <Image
-                  width={120}
-                  height={80}
-                  src={post.data.heroImage}
-                  alt={post.data.title}
-                  class="h-20 w-auto aspect-video object-cover rounded"
-                />
-              )}
-            </div>
-          </div>
-        </a>
-      ))}
-    </div>
-
-    {posts.length === 0 && (
-      <div class="text-center py-12">
-        <p class="text-neutral-400">
-          the search returned no results, please check back soon!
-        </p>
-      </div>
-    )}
-  </section>
-</Layout>
