@@ -1,14 +1,14 @@
 {
-  "projects": [
-    {
-      "name": "Matty",
-      "url": "https://heymatty.vercel.app",
-      "description": "A virtual assistant that can help with scheduling events, setting reminders, and more."
-    },
-    {
-      "name": "Oreweb",
-      "url": "https://oreweb.vercel.app/",
-      "description": "P2P anonymous file sharing platform built on NextJS and PeerJS."
-    }
-  ]
+	"projects": [
+		{
+			"name": "Matty",
+			"url": "https://heymatty.vercel.app",
+			"description": "A virtual assistant that can help with scheduling events, setting reminders, and more."
+		},
+		{
+			"name": "Oreweb",
+			"url": "https://oreweb.vercel.app/",
+			"description": "P2P anonymous file sharing platform built on NextJS and PeerJS."
+		}
+	]
 }

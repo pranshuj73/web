@@ -1,22 +1,29 @@
 // src/pages/[slug]/og.png.js
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import { generateOGImage } from "@/utils/ogImageGenerator";
 
 export async function getStaticPaths() {
-  const posts = (await getCollection("notes", ({ data }) => !data.hidden));
+	const notes = await getCollection("notes");
+	const blog = await getCollection("blog");
 
-  return posts.map(post => ({
-    params: { slug: post.id },
-    props: { post },
-  }));
+	const posts = [...notes, ...blog];
+
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: { post },
+	}));
 }
 
-export async function GET({ props }: {props: any}) {
-  const image = await generateOGImage(props);
+type PostProps = {
+	post: CollectionEntry<"blog"> | CollectionEntry<"notes">;
+};
 
-  return new Response(image, {
-    headers: { "Content-Type": "image/png" },
-  });
+export async function GET({ props }: { props: PostProps }) {
+	const image = await generateOGImage(props);
+
+	return new Response(image, {
+		headers: { "Content-Type": "image/png" },
+	});
 }
 
 // Set to true to ensure static generation at build time

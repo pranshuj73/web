@@ -1,20 +1,20 @@
 {
-  "experience": [
-    {
-      "title": "Data Engineer",
-      "company": "Neoware",
-      "company_url": "https://neoware.ai/",
-      "duration": "2025",
-      "location": "IN",
-      "active": true
-    },
-    {
-      "title": "Software Engineer Intern",
-      "company": "Finequs",
-      "company_url": "https://finequs.com/",
-      "duration": "2024",
-      "location": "IN",
-      "active": false
-    }
-  ]
+	"experience": [
+		{
+			"title": "Data Engineer",
+			"company": "Neoware",
+			"company_url": "https://neoware.ai/",
+			"duration": "2025",
+			"location": "IN",
+			"active": true
+		},
+		{
+			"title": "Software Engineer Intern",
+			"company": "Finequs",
+			"company_url": "https://finequs.com/",
+			"duration": "2024",
+			"location": "IN",
+			"active": false
+		}
+	]
 }

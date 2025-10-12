@@ -8,7 +8,11 @@ import SectionHeading from "@/components/ui/SectionHeading.astro";
 
 import LeftArrowIcon from "@/icon/LeftArrowIcon.astro";
 
-const { heading="here's a collection of my posts!", posts, collectionType } = Astro.props;
+const {
+	heading = "here's a collection of my posts!",
+	posts,
+	collectionType,
+} = Astro.props;
 ---
 
 <Layout class="pt-24 pb-6">

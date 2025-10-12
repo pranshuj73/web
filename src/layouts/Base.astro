@@ -1,12 +1,12 @@
 ---
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
-import '../styles/global.css';
-import BaseHead from '../components/BaseHead.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import MetaImage from '@/assets/meta.jpg';
+import "../styles/global.css";
+import BaseHead from "../components/BaseHead.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+import MetaImage from "@/assets/meta.jpg";
 
-const { class: className, meta = null} = Astro.props;
+const { class: className, meta = null } = Astro.props;
 
 const metaImage = meta?.image || MetaImage;
 const metaTitle = meta?.title || SITE_TITLE;
