@@ -1,0 +1,16 @@
+---
+const { class: className } = Astro.props;
+---
+
+<section
+  class={`
+    prose prose-sm prose-invert prose-neutral max-w-none
+    prose-headings:text-xl prose-headings:tracking-wider prose-headings:font-black
+    prose-hr:border-neutral-600 prose-hr:border-dashed
+    prose-a:text-cyan-500 prose-a:hover:text-cyan-600 prose-a:border-b prose-a:pb-1 prose-a:border-current prose-a:border-dashed
+    prose-blockquote:border-l-2
+    ${className}
+  `}
+>
+  <slot />
+</section>

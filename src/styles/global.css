@@ -1,59 +1,53 @@
 @import "tailwindcss";
+@plugin '@tailwindcss/typography';
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
-  }
-  
-  body {
-    @apply bg-black text-neutral-300;
-  }
-  
-  h1 {
-    @apply text-xl font-bold text-white;
-  }
-  
-  h2 {
-    @apply text-base font-bold text-white;
-  }
-  
-  h3 {
-    @apply text-base font-semibold text-white;
-  }
-  
-  p {
-    @apply text-base leading-relaxed;
-  }
-  
-  .text-lg {
-    @apply text-lg;
-  }
+	html {
+		scroll-behavior: smooth;
+	}
 
-  article h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-pixel);
-    @apply tracking-wider font-black text-lg;
-  }
+	body {
+		@apply bg-black text-neutral-300;
+	}
 
-  article hr {
-    @apply border-neutral-600 border-dashed my-4;
-  }
+	h1 {
+		@apply text-xl font-bold text-white;
+	}
 
-  article a {
-    @apply text-cyan-500 hover:text-cyan-600 border-b pb-1 border-current border-dashed;
-  }
+	h2 {
+		@apply text-base font-bold text-white;
+	}
 
-  .highlight {
-    @apply border-b pb-1 border-current border-dashed;
-  }
+	h3 {
+		@apply text-base font-semibold text-white;
+	}
 
-  .font-pixel {
-    font-family: var(--font-pixel);
-    @apply tracking-wider font-black;
-  }
+	p {
+		@apply text-base leading-relaxed;
+	}
+
+	article h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--font-pixel);
+		@apply tracking-wider font-black text-lg;
+	}
+
+	.highlight {
+		@apply border-b pb-1 border-current border-dashed;
+	}
+
+	.font-pixel {
+		font-family: var(--font-pixel);
+		@apply tracking-wider font-black;
+	}
 }
 
 @layer components {
-  .tech-tag {
-    @apply inline-block bg-neutral-700 text-neutral-300 px-3 py-1 rounded-lg text-sm;
-  }
+	.tech-tag {
+		@apply inline-block bg-neutral-700 text-neutral-300 px-3 py-1 rounded-lg text-sm;
+	}
 }

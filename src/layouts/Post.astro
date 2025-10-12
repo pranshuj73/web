@@ -1,38 +1,52 @@
 ---
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
-import Layout from "@/layouts/Base.astro";
-import BaseHead from "@/components/BaseHead.astro";
-import SectionHeading from "@/components/ui/SectionHeading.astro";
-import LeftArrowIcon from "@/icon/LeftArrowIcon.astro";
-import { calculateReadingTime } from "@/utils/readingTime";
-import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
 
-type Props = (CollectionEntry<"blog">["data"] | CollectionEntry<"notes">["data"]) & {slug?: string; collection?: "blog" | "notes"};
+import Layout from "@/layouts/Base.astro";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
+import Prose from "@/components/post/Prose.astro";
+
+import LeftArrowIcon from "@/icon/LeftArrowIcon.astro";
+
+import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
+import { calculateReadingTime } from "@/utils/readingTime";
+
+type Props = (
+	| CollectionEntry<"blog">["data"]
+	| CollectionEntry<"notes">["data"]
+) & { slug?: string; collection?: "blog" | "notes" };
+
 type SiteMetadata = {
 	title: string;
 	description: string;
 	image?: ImageMetadata;
-}
+};
 
-const { slug, title, description, pubDate, updatedDate, heroImage, collection } =
-  Astro.props;
+const {
+	slug,
+	title,
+	description,
+	pubDate,
+	updatedDate,
+	heroImage,
+	collection,
+} = Astro.props;
 
 const content = Astro.slots.render("default");
 const readingTime = calculateReadingTime(await content);
 
 const OGImage = {
-  src: `${Astro.site}${slug}/og.png`,
-  width: 2400,
-  height: 1260,
-  format: 'png' as const
-}
+	src: `${Astro.site}${slug}/og.png`,
+	width: 2400,
+	height: 1260,
+	format: "png" as const,
+};
 
 const meta: SiteMetadata = {
-  title: `${title}`, 
-  description: description || SITE_DESCRIPTION,
-  image: heroImage && heroImage.src ? heroImage : OGImage,
-}
+	title: title || SITE_TITLE,
+	description: description || SITE_DESCRIPTION,
+	image: heroImage && heroImage.src ? heroImage : OGImage,
+};
 ---
 
 <Layout class="pt-24 pb-18" meta={meta}>
@@ -48,7 +62,7 @@ const meta: SiteMetadata = {
     </a>
   </div>
 
-  <article class="space-y-6">
+  <article class="space-y-6 text-sm">
     <!-- Hero Image -->
     {
       heroImage && (
@@ -72,9 +86,9 @@ const meta: SiteMetadata = {
     </div>
 
     <!-- Article Content -->
-    <div class="flex flex-col gap-4 py-2 text-neutral-300">
+    <Prose class="py-2 text-neutral-300">
       <slot />
-    </div>
+    </Prose>
 
     <div
       class="flex flex-col space-y-2 text-sm text-neutral-400 font-mono border-t border-neutral-700 pt-6 mt-10"
